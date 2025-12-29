@@ -129,6 +129,30 @@ function setupEventListeners() {
             authOverlay.classList.remove('open');
         }
     });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const navLinks = document.getElementById('nav-links');
+
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+
+            // Toggle Icon (Menu <-> X)
+            const icon = mobileMenuBtn.querySelector('svg');
+            if (navLinks.classList.contains('active')) {
+                // We rely on lucide to re-render, but for simplicity let's just rotate it or change it if possible.
+                // Or better, just close on link click.
+            }
+        });
+    }
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+        });
+    });
 }
 
 function switchAuth(mode) {
@@ -405,11 +429,19 @@ function checkout() {
     // Encode for URL
     const encodedMessage = encodeURIComponent(message);
 
-    // Replace this with your actual business phone number
-    const phoneNumber = "919876543210";
+    // Phone Numbers
+    const phone1 = "918260636417";
+    const phone2 = "919871162218";
 
-    // Open WhatsApp
-    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+    // Open WhatsApp for First Number
+    window.open(`https://wa.me/${phone1}?text=${encodedMessage}`, '_blank');
+
+    // Prompt for Second Number (Browsers block simultaneous popups)
+    setTimeout(() => {
+        if (confirm("Would you like to send the order confirmation to the second number as well?")) {
+            window.open(`https://wa.me/${phone2}?text=${encodedMessage}`, '_blank');
+        }
+    }, 1000);
 }
 
 // Attach checkout listener
