@@ -17,9 +17,21 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles_mobile_updates.css">
 </head>
 
 <body>
+
+    <!-- Pookie Pre-loader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-cookie">🍪</div>
+            <div class="preloader-bar">
+                <div class="preloader-progress"></div>
+            </div>
+            <div class="preloader-text">Baking Sweetness...</div>
+        </div>
+    </div>
 
     <!-- Navigation -->
     <nav class="navbar">
@@ -41,7 +53,7 @@
             </div>
         </div>
     </nav>
-    <!-- ... (existing hero code) ... -->
+
 
     <!-- Auth Modal -->
     <div class="auth-overlay" id="auth-overlay">
@@ -133,22 +145,36 @@
     <section class="section testimonials-section">
         <div class="container">
             <h2 class="section-title">Pookie Love</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"The Royal Nankhatai melts in your mouth! Reminds me of my grandmother's
-                        recipe but with a luxe twist."</p>
-                    <p class="testimonial-author">- Aisha K.</p>
+            <div class="testimonials-container">
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <span class="testimonial-author">- Aisha K.</span>
+                            <div class="star-rating">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p class="testimonial-text">"The Royal Nankhatai melts in your mouth! Reminds me of my
+                            grandmother's recipe but with a luxe twist."</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <span class="testimonial-author">- Rohan M.</span>
+                            <div class="star-rating">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p class="testimonial-text">"Pookie Cookie is my go-to for Diwali gifting. The Rose Pistachio is
+                            absolute heaven."</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <span class="testimonial-author">- Priya S.</span>
+                            <div class="star-rating">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <p class="testimonial-text">"Authentic flavors, stunning packaging. It's an experience, not just
+                            a cookie."</p>
+                    </div>
                 </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"Pike Cookie is my go-to for Diwali gifting. The Rose Pistachio is
-                        absolute heaven."</p>
-                    <p class="testimonial-author">- Rohan M.</p>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"Authentic flavors, stunning packaging. It's an experience, not just a
-                        cookie."</p>
-                    <p class="testimonial-author">- Priya S.</p>
-                </div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="btn btn-secondary" id="write-review-btn">Write a Review</button>
             </div>
         </div>
     </section>
@@ -169,7 +195,7 @@
     </section>
 
     <!-- Our Story Section -->
-    <section id="about" class="section about-section">
+    <section id="about" class="section about-section reveal">
         <div class="container">
             <div class="about-content">
                 <h2 class="section-title">Our Story</h2>
@@ -195,6 +221,42 @@
         </div>
     </section>
 
+    <!-- Footer -->
+    <footer class="luxury-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand reveal">
+                <a href="#" class="brand">Pookie<span class="text-gold">Cookie</span></a>
+                <p class="brand-mission">Handcrafting the finest Indian-inspired cookies with love, heritage, and pure
+                    ingredients. Fresh taste, honest baking, and royal luxury in every bite.</p>
+                <div class="social-links">
+                    <a href="#"><i data-lucide="instagram"></i></a>
+                    <a href="#"><i data-lucide="facebook"></i></a>
+                    <a href="#"><i data-lucide="twitter"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links reveal" style="--delay: 0.2s">
+                <h4>Explore</h4>
+                <a href="#shop">Collection</a>
+                <a href="#about">Our Story</a>
+                <a href="#">Wholesale</a>
+                <a href="#">Gifting</a>
+            </div>
+
+            <div class="footer-contact reveal" style="--delay: 0.4s">
+                <h4>Connect</h4>
+                <p><i data-lucide="map-pin"></i> RZ-405/A, Jhangala's, Shankar Chowk Road, Rajnagar-2, Palam</p>
+                <p><i data-lucide="phone"></i> 8260636417 / 98711 62218</p>
+                <p><i data-lucide="mail"></i> cookieforthepookie@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2024 Pookie Cookie. All Rights Reserved. Crafted for Royalty.</p>
+            </div>
+        </div>
+    </footer>
+
     <!-- Cart Sidebar -->
     <div class="cart-overlay" id="cart-overlay"></div>
     <aside class="cart-sidebar" id="cart-sidebar">
@@ -203,6 +265,13 @@
             <button class="close-cart" id="close-cart"><i data-lucide="x"></i></button>
         </div>
         <div class="cart-items" id="cart-items">
+            <!-- Free Shipping Progress -->
+            <div id="shipping-progress-container" class="shipping-progress-container" style="display: none;">
+                <p class="shipping-text" id="shipping-text"></p>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="shipping-bar"></div>
+                </div>
+            </div>
             <!-- Cart items injected here -->
             <p class="empty-cart-msg">Your cart is empty.</p>
         </div>
@@ -215,6 +284,87 @@
         </div>
     </aside>
 
+    <!-- Address Modal -->
+    <div class="auth-overlay" id="address-overlay">
+        <div class="auth-modal">
+            <button class="close-auth" id="close-address"><i data-lucide="x"></i></button>
+            <div class="auth-content">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div
+                        style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: rgba(244, 196, 48, 0.1); border-radius: 50%; border: 2px solid var(--color-gold); margin-bottom: 1.5rem;">
+                        <i data-lucide="map-pin" style="width: 40px; height: 40px; color: var(--color-gold);"></i>
+                    </div>
+                    <h2 style="color: var(--color-gold);">Delivery Details</h2>
+                    <p style="color: var(--color-text-muted);">Where should we send your Pookie Cookies? 🍪</p>
+                </div>
+                <form id="address-form">
+                    <div class="input-group">
+                        <textarea id="delivery-address"
+                            placeholder="Enter your full address (House No, Street, Landmark, Pincode)..." required
+                            style="width: 100%; height: 120px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; color: white; margin-bottom: 1.5rem; font-family: inherit; resize: none;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Confirm & Order via WhatsApp</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="auth-overlay" id="review-overlay">
+        <div class="auth-modal">
+            <button class="close-auth" id="close-review"><i data-lucide="x"></i></button>
+            <div class="auth-content">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div
+                        style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: rgba(244, 196, 48, 0.1); border-radius: 50%; border: 2px solid var(--color-gold); margin-bottom: 1.5rem;">
+                        <i data-lucide="message-square"
+                            style="width: 40px; height: 40px; color: var(--color-gold);"></i>
+                    </div>
+                    <h2 style="color: var(--color-gold);">Share Your Love</h2>
+                    <p style="color: var(--color-text-muted);">How was your Pookie experience?</p>
+                </div>
+                <form
+                    onsubmit="event.preventDefault(); showToast('Thank you for your sweet feedback! 🍪'); document.getElementById('review-overlay').classList.remove('open');">
+                    <div class="input-group">
+                        <input type="text" placeholder=" " required style="width: 100%;">
+                        <label>Your Name</label>
+                    </div>
+                    <div class="input-group">
+                        <textarea placeholder="Tell us more about the taste..." required
+                            style="width: 100%; height: 100px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; color: white; margin-bottom: 1.5rem;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ingredients Modal -->
+    <div class="auth-overlay" id="ingredients-overlay">
+        <div class="auth-modal">
+            <button class="close-auth" id="close-ingredients"><i data-lucide="x"></i></button>
+            <div class="auth-content">
+                <h2 style="color: var(--color-gold); text-align: center; margin-bottom: 1rem;">Nutritional Info</h2>
+                <h3 id="modal-product-title"
+                    style="text-align: center; margin-bottom: 1rem; color: var(--color-text-main);"></h3>
+                <div id="modal-ingredients-list" style="color: var(--color-text-muted); line-height: 1.8;">
+                    <!-- Ingredients injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Sticky Checkout Bar -->
+    <div id="sticky-checkout-bar" class="sticky-checkout-bar">
+        <div class="sticky-info">
+            <span class="sticky-items">0 items</span>
+            <span class="sticky-dot">•</span>
+            <span class="sticky-total">₹0</span>
+        </div>
+        <button class="sticky-btn" onclick="checkout()">Checkout <i data-lucide="arrow-right"
+                style="width: 16px;"></i></button>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast-container" class="toast-container"></div>
 
@@ -225,8 +375,37 @@
     <!-- Config -->
     <script src="firebase-config.js"></script>
 
+    <!-- Pookie AI Assistant Bot -->
+    <div class="bot-container" id="pookie-bot">
+        <button class="bot-bubble" id="bot-toggle">
+            <i data-lucide="sparkles"></i>
+        </button>
+        <div class="bot-window" id="bot-window">
+            <div class="bot-header">
+                <div class="bot-status">
+                    <div class="status-dot"></div>
+                    <span>Pookie Concierge</span>
+                </div>
+                <button class="bot-close" id="bot-close-btn"><i data-lucide="minus"></i></button>
+            </div>
+            <div class="bot-messages" id="bot-messages">
+                <!-- Messages will be injected here -->
+            </div>
+            <div class="bot-actions" id="bot-actions">
+                <button class="bot-action-btn" onclick="botResponse('flavors')">What flavors?</button>
+                <button class="bot-action-btn" onclick="botResponse('shipping')">Shipping info?</button>
+                <button class="bot-action-btn" onclick="botResponse('order')">How to order?</button>
+            </div>
+            <div class="bot-input-area">
+                <input type="text" id="bot-input" placeholder="Ask Pookie something...">
+                <button id="bot-send"><i data-lucide="send"></i></button>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Script -->
-    <script src="script.js?v=2" defer></script>
+    <script src="script.js?v=3" defer></script>
+    <script src="bot.js" defer></script>
     <script>
         lucide.createIcons();
     </script>

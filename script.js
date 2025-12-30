@@ -2,51 +2,43 @@
 const products = [
     {
         id: 1,
-        name: "Royal Nankhatai",
-        price: 350,
-        category: "spiced",
-        description: "Melt-in-mouth shortbread with cardamom, saffron, and pistachios.",
-        image: "assets/nankhatai.png"
+        name: "Chocho Almond Nankhatai",
+        price: 190,
+        category: "nutty",
+        description: "Rich chocolate nankhatai topped with crunchy almonds.",
+        image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&q=80&w=800",
+        rating: 4.8,
+        ingredients: ["Whole Wheat Flour", "Pure Desi Ghee", "Cocoa Powder", "Roasted Almonds", "Sugar", "Cardamom"]
     },
     {
         id: 2,
-        name: "Hyderabadi Osmania",
-        price: 280,
+        name: "Sprinkler Cookie",
+        price: 150,
         category: "classic",
-        description: "The classic sweet and salty biscuit, baked to golden perfection.",
-        image: "assets/osmania.png"
+        description: "Fun and festive cookies covered in rainbow sprinkles.",
+        image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&q=80&w=800",
+        rating: 4.5,
+        ingredients: ["Refined Flour", "Butter", "Sugar", "Vanilla Extract", "Rainbow Sprinkles", "Milk Solids"]
     },
     {
         id: 3,
-        name: "Shrewsbury Butter",
-        price: 450,
-        category: "classic",
-        description: "Rich, buttery Pune classics stamped with our signature embossed Pookie design.",
-        image: "assets/shrewsbury.png"
+        name: "Pista Cookie",
+        price: 150,
+        category: "nutty",
+        description: "Buttery cookies loaded with premium pistachios.",
+        image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc3605d?auto=format&fit=crop&q=80&w=800",
+        rating: 4.9,
+        ingredients: ["Refined Flour", "Butter", "Sugar", "Iranian Pistachios", "Saffron", "Rose Water"]
     },
     {
         id: 4,
-        name: "Jeera Masala Crisp",
-        price: 220,
-        category: "spiced",
-        description: "Savory cumin-spiced cookies for the perfect chai-time companion.",
-        image: "assets/jeera.png"
-    },
-    {
-        id: 5,
-        name: "Coconut Khari",
-        price: 300,
-        category: "nutty",
-        description: "Flaky, multi-layered puff pastry biscuits with a sweet coconut glaze.",
-        image: "assets/khari.png"
-    },
-    {
-        id: 6,
-        name: "Rose Pistachio",
-        price: 499,
-        category: "nutty",
-        description: "Infused with pure rose water and studded with Iranian pistachios.",
-        image: "assets/rose_pistachio.png"
+        name: "Choco Chip",
+        price: 170,
+        category: "classic",
+        description: "Classic golden cookies packed with chocolate chips.",
+        image: "https://images.unsplash.com/photo-1605807646983-377bc5a76493?auto=format&fit=crop&q=80&w=800",
+        rating: 4.7,
+        ingredients: ["Refined Flour", "Brown Sugar", "Butter", "Dark Chocolate Chips", "Vanilla Extract", "Sea Salt"]
     }
 ];
 
@@ -60,6 +52,16 @@ const cartCountEl = document.querySelector('.cart-count');
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Pre-loader Logic
+    const preloader = document.getElementById('preloader');
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            preloader.classList.add('fade-out');
+            setTimeout(() => preloader.style.display = 'none', 1200);
+            initScrollReveal();
+        }, 1000); // Minimum load time for branding
+    });
+
     // Only verify icons if lucide is available
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
@@ -68,7 +70,29 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     setupCursor();
     setupAuthListeners(); // Initialize Auth Listeners
+    setupIngredientsModal(); // Ingredients Modal
+
+    // Checkout listener
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', checkout);
+    }
 });
+
+function initScrollReveal() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section, .testimonial-card, .product-card, .section-title, .reveal').forEach(el => {
+        el.classList.add('reveal');
+        observer.observe(el);
+    });
+}
 
 function setupEventListeners() {
     // Cart Toggles
@@ -138,12 +162,14 @@ function setupEventListeners() {
         mobileMenuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
 
-            // Toggle Icon (Menu <-> X)
-            const icon = mobileMenuBtn.querySelector('svg');
+            // Toggle Icon
+            const icon = mobileMenuBtn.querySelector('i');
             if (navLinks.classList.contains('active')) {
-                // We rely on lucide to re-render, but for simplicity let's just rotate it or change it if possible.
-                // Or better, just close on link click.
+                icon.setAttribute('data-lucide', 'x');
+            } else {
+                icon.setAttribute('data-lucide', 'menu');
             }
+            lucide.createIcons();
         });
     }
 
@@ -153,6 +179,75 @@ function setupEventListeners() {
             navLinks.classList.remove('active');
         });
     });
+
+    // Review Modal
+    setupReviewModal();
+
+    // Address Modal
+    setupAddressModal();
+
+    // Infinite Testimonials Scroll
+    duplicateTestimonials();
+}
+
+function duplicateTestimonials() {
+    const grid = document.querySelector('.testimonials-grid');
+    if (grid) {
+        const items = grid.innerHTML;
+        grid.innerHTML = items + items; // Double for perfect loop at -50%
+    }
+}
+
+function setupReviewModal() {
+    const btn = document.getElementById('write-review-btn');
+    const overlay = document.getElementById('review-overlay');
+    const closeBtn = document.getElementById('close-review');
+
+    if (btn) {
+        btn.addEventListener('click', () => {
+            overlay.classList.add('open');
+            vibrate(10);
+            if (window.lucide) lucide.createIcons(); // Ensure icons in modal are rendered
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            overlay.classList.remove('open');
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('open');
+        });
+    }
+}
+
+function setupAddressModal() {
+    const overlay = document.getElementById('address-overlay');
+    const closeBtn = document.getElementById('close-address');
+    const form = document.getElementById('address-form');
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            overlay.classList.remove('open');
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('open');
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const address = document.getElementById('delivery-address').value;
+            finalizeCheckout(address);
+        });
+    }
 }
 
 function switchAuth(mode) {
@@ -271,6 +366,7 @@ function showToast(message) {
     // Remove after 3 seconds
     setTimeout(() => {
         toast.classList.add('fade-out');
+
         toast.addEventListener('animationend', () => {
             toast.remove();
         });
@@ -288,18 +384,37 @@ function setupCursor() {
     document.addEventListener('mousemove', (e) => {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
+
+        // Subtle magnetic effect/lag for trail (handled by transition in CSS)
     });
 
-    // Event Delegation for Hover Effects (Works on dynamic elements too)
+    // Event Delegation for Hover Effects
     document.addEventListener('mouseover', (e) => {
-        if (e.target.closest('a, button, .product-card, input, .user-profile, .dropdown-item, .click-trigger')) {
+        const target = e.target.closest('a, button, .product-card, input, .user-profile, .dropdown-item, .ingredients-link');
+        if (target) {
             cursor.classList.add('hover');
+
+            // Dynamic Cursor Text
+            if (target.classList.contains('btn-add')) {
+                cursor.textContent = 'ADD';
+                cursor.style.fontSize = '12px';
+            } else if (target.classList.contains('ingredients-link')) {
+                cursor.textContent = 'INFO';
+                cursor.style.fontSize = '12px';
+            } else if (target.closest('.product-card')) {
+                cursor.textContent = 'VIEW';
+                cursor.style.fontSize = '12px';
+            } else {
+                cursor.textContent = '';
+            }
         }
     });
 
     document.addEventListener('mouseout', (e) => {
-        if (e.target.closest('a, button, .product-card, input, .user-profile, .dropdown-item, .click-trigger')) {
+        const target = e.target.closest('a, button, .product-card, input, .user-profile, .dropdown-item, .ingredients-link');
+        if (target) {
             cursor.classList.remove('hover');
+            cursor.textContent = '';
         }
     });
 }
@@ -315,13 +430,62 @@ function renderProducts(filter) {
         <div class="product-card fade-in-up">
             <img src="${product.image}" alt="${product.name}" class="product-image">
             <div class="product-info">
+                <div class="product-rating">
+                   ${getStars(product.rating)} <span>(${product.rating})</span>
+                </div>
                 <h3 class="product-title">${product.name}</h3>
+                <span class="ingredients-link" onclick="openIngredients(${product.id})">View Ingredients</span>
                 <p class="product-price">₹${product.price.toFixed(0)}</p>
                 <button class="btn btn-add" onclick="addToCart(${product.id})">Add to Cart</button>
             </div>
         </div>
     `).join('');
+
+    // Re-create icons if any new ones were added (like stars if we used icons, but here we used text/svg)
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
+
+function getStars(rating) {
+    // Simple star generation
+    const fullStars = Math.floor(rating);
+    const hasHalf = rating % 1 >= 0.5;
+    let stars = '';
+
+    for (let i = 0; i < fullStars; i++) stars += '<i data-lucide="star" fill="currentColor" size="14"></i>';
+    // if (hasHalf) stars += '½'; // Lucide doesn't have half star easily, skipping for simplicity or just filling
+    return stars;
+}
+
+// Ingredients Modal Logic
+function openIngredients(id) {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+
+    const modalTitle = document.getElementById('modal-product-title');
+    const modalList = document.getElementById('modal-ingredients-list');
+    const overlay = document.getElementById('ingredients-overlay');
+
+    modalTitle.textContent = product.name;
+    modalList.innerHTML = product.ingredients.map(ing => `<div style="margin-bottom: 0.5rem;">• ${ing}</div>`).join('');
+
+    overlay.classList.add('open');
+}
+
+function setupIngredientsModal() {
+    const overlay = document.getElementById('ingredients-overlay');
+    const closeBtn = document.getElementById('close-ingredients');
+
+    closeBtn.addEventListener('click', () => {
+        overlay.classList.remove('open');
+    });
+
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            overlay.classList.remove('open');
+        }
+    });
+}
+window.openIngredients = openIngredients; // Global for onclick
 
 // Cart Logic
 function addToCart(id) {
@@ -336,6 +500,48 @@ function addToCart(id) {
 
     updateCartUI();
     openCart();
+    flyToCart(id);
+    vibrate(15); // Stronger haptic for adding item
+}
+
+function flyToCart(id) {
+    const productCard = document.querySelector(`[onclick="addToCart(${id})"]`).closest('.product-card');
+    if (!productCard) return;
+
+    const img = productCard.querySelector('img');
+    const cartBtn = document.getElementById('cart-btn');
+
+    const clone = img.cloneNode(true);
+    const rect = img.getBoundingClientRect();
+    const cartRect = cartBtn.getBoundingClientRect();
+
+    clone.classList.add('flying-cookie');
+    clone.style.position = 'fixed';
+    clone.style.top = rect.top + 'px';
+    clone.style.left = rect.left + 'px';
+    clone.style.width = rect.width + 'px';
+    clone.style.height = rect.height + 'px';
+    clone.style.zIndex = '10001';
+    clone.style.borderRadius = '50%';
+    clone.style.pointerEvents = 'none';
+    clone.style.transition = 'all 0.8s cubic-bezier(0.19, 1, 0.22, 1)';
+
+    document.body.appendChild(clone);
+
+    setTimeout(() => {
+        clone.style.top = cartRect.top + 'px';
+        clone.style.left = cartRect.left + 'px';
+        clone.style.width = '20px';
+        clone.style.height = '20px';
+        clone.style.opacity = '0.5';
+        clone.style.transform = 'scale(0.5) rotate(720deg)';
+    }, 10);
+
+    setTimeout(() => {
+        clone.remove();
+        cartBtn.style.transform = 'scale(1.2)';
+        setTimeout(() => cartBtn.style.transform = 'scale(1)', 200);
+    }, 810);
 }
 
 function removeFromCart(id) {
@@ -360,14 +566,45 @@ function updateCartUI() {
     const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCountEl.textContent = totalCount;
 
-    // Update Items
-    if (cart.length === 0) {
+    // Calculate Total
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotalEl.textContent = '₹' + total.toFixed(0);
+
+    // Free Shipping Progress
+    const shippingThreshold = 399;
+    const progressContainer = document.getElementById('shipping-progress-container');
+    const progressBar = document.getElementById('shipping-bar');
+    const shippingText = document.getElementById('shipping-text');
+
+    if (cart.length > 0) {
+        progressContainer.style.display = 'block';
+        const percentage = Math.min((total / shippingThreshold) * 100, 100);
+        progressBar.style.width = percentage + '%';
+
+        if (total >= shippingThreshold) {
+            shippingText.innerHTML = '🎉 <b>Free Shipping Unlocked!</b>';
+            shippingText.style.color = '#4CAF50'; // Green
+        } else {
+            const remaining = shippingThreshold - total;
+            shippingText.innerHTML = `Add <b>₹${remaining.toFixed(0)}</b> for Free Shipping`;
+            shippingText.style.color = 'var(--color-text-main)';
+        }
+    } else {
+        progressContainer.style.display = 'none';
         cartItemsContainer.innerHTML = '<p class="empty-cart-msg">Your cart is empty.</p>';
-        cartTotalEl.textContent = '₹0';
         return;
     }
 
-    cartItemsContainer.innerHTML = cart.map(item => `
+    // Update Items
+    cartItemsContainer.innerHTML = '';
+    // Re-append progress container (since we clear innerHTML, we need to manage structure or just append items after)
+    // Actually, in index.html, shipping-progress-container is INSIDE cart-items. 
+    // So clearing cartItemsContainer wipes it.
+    // Let's fix that structure in JS:
+
+    cartItemsContainer.appendChild(progressContainer); // Keep it at top
+
+    const itemsHtml = cart.map(item => `
         <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: center;">
             <img src="${item.image}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
             <div style="flex: 1;">
@@ -384,14 +621,33 @@ function updateCartUI() {
             </button>
         </div>
     `).join('');
+
+    const itemsWrapper = document.createElement('div');
+    itemsWrapper.innerHTML = itemsHtml;
+    cartItemsContainer.appendChild(itemsWrapper);
+
+
     lucide.createIcons(); // For trash icon
 
-    // Update Total
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    cartTotalEl.textContent = '₹' + total.toFixed(0);
+    // Sticky Bar Logic
+    updateStickyBar(total, totalCount);
+}
+
+function updateStickyBar(total, count) {
+    const bar = document.getElementById('sticky-checkout-bar');
+    if (!bar) return;
+
+    if (count > 0) {
+        bar.classList.add('visible');
+        bar.querySelector('.sticky-items').textContent = `${count} item${count > 1 ? 's' : ''}`;
+        bar.querySelector('.sticky-total').textContent = `₹${total.toFixed(0)}`;
+    } else {
+        bar.classList.remove('visible');
+    }
 }
 
 function openCart() {
+    vibrate(10); // Haptic
     cartSidebar.classList.add('open');
     cartOverlay.classList.add('open');
 }
@@ -408,6 +664,7 @@ window.handleGoogleLogin = handleGoogleLogin;
 window.handleLogin = handleLogin;
 window.handleSignup = handleSignup;
 window.handleLogout = handleLogout;
+
 // Checkout Logic
 function checkout() {
     if (cart.length === 0) {
@@ -415,6 +672,16 @@ function checkout() {
         return;
     }
 
+    // Open Address Modal instead of redirecting immediately
+    const overlay = document.getElementById('address-overlay');
+    if (overlay) {
+        overlay.classList.add('open');
+        vibrate(10);
+        if (window.lucide) lucide.createIcons();
+    }
+}
+
+function finalizeCheckout(address) {
     let message = "Hi Pookie Cookie! 🍪\nI'd like to place an order:\n\n";
     let total = 0;
 
@@ -423,7 +690,15 @@ function checkout() {
         total += item.price * item.quantity;
     });
 
+    const shippingThreshold = 399;
+    let shippingStatus = "Shipping Charges Apply";
+    if (total >= shippingThreshold) {
+        shippingStatus = "Free Shipping Applied 🎉";
+    }
+
     message += `\n*Total Order Value: ₹${total}*`;
+    message += `\n(${shippingStatus})`;
+    message += `\n\n📍 *Delivery Address:* \n${address}`;
     message += "\n\nPlease confirm my order!";
 
     // Encode for URL
@@ -433,10 +708,13 @@ function checkout() {
     const phone1 = "918260636417";
     const phone2 = "919871162218";
 
+    // Close Address Modal
+    document.getElementById('address-overlay').classList.remove('open');
+
     // Open WhatsApp for First Number
     window.open(`https://wa.me/${phone1}?text=${encodedMessage}`, '_blank');
 
-    // Prompt for Second Number (Browsers block simultaneous popups)
+    // Prompt for Second Number
     setTimeout(() => {
         if (confirm("Would you like to send the order confirmation to the second number as well?")) {
             window.open(`https://wa.me/${phone2}?text=${encodedMessage}`, '_blank');
@@ -444,11 +722,10 @@ function checkout() {
     }, 1000);
 }
 
-// Attach checkout listener
-document.addEventListener('DOMContentLoaded', () => {
-    // ... existing init ...
-    const checkoutBtn = document.getElementById('checkout-btn');
-    if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', checkout);
+// Haptic Feedback Utility
+function vibrate(ms) {
+    if (navigator.vibrate) {
+        navigator.vibrate(ms);
     }
-});
+}
+

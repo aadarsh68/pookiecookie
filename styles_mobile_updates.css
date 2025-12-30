@@ -1,0 +1,441 @@
+/* Mobile-First Premium UI Updates */
+
+/* 1. Global Touch Optimizations */
+@media (max-width: 768px) {
+    :root {
+        --header-height: 70px;
+        --container-width: 100%;
+    }
+
+    body {
+        font-size: 16px;
+        /* Base font size for readability */
+        overflow-x: hidden;
+        /* Prevent horizontal scroll */
+    }
+
+    .container {
+        padding: 0 1.5rem;
+    }
+
+    .section {
+        padding: 4rem 0;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 2.5rem;
+    }
+}
+
+/* 2. Enhanced Mobile Navigation */
+@media (max-width: 768px) {
+    .navbar {
+        height: var(--header-height);
+        background: rgba(26, 15, 15, 0.95);
+        /* Deeper contrast background */
+        backdrop-filter: blur(15px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .brand {
+        font-size: 1.8rem;
+        z-index: 102;
+        /* Above drawer */
+        position: relative;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+        /* Ensure it's visible */
+        background: none;
+        border: none;
+        color: var(--color-text-main);
+        z-index: 102;
+        /* Above drawer */
+        position: relative;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: radial-gradient(circle at top right, #3a2525, #1a0f0f);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        padding: 2rem;
+        transform: translateY(-100%);
+        transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        /* Bouncy enter */
+        z-index: 101;
+        /* Below brand/toggle */
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .nav-links a {
+        font-size: 1.8rem;
+        font-family: var(--font-heading);
+    }
+
+    /* Hide login/cart buttons inside the full-screen menu if duplicates exist,
+       but usually we want them visible. Let's style them large. */
+    .login-btn,
+    .cart-btn {
+        font-size: 1.2rem;
+        padding: 1rem 2rem;
+    }
+
+    /* Move Cart & User Profile icons outside the drawer for quick access */
+    /* This might require HTML shuffle, but we can visually hack or rely on drawer for now. */
+    /* Let's keep it simple: Menu opens, everything is there. */
+}
+
+/* 3. Hero Section Responsive */
+@media (max-width: 768px) {
+    .hero {
+        min-height: 85vh;
+        /* Taller for mobile impact */
+        padding-top: 100px;
+        align-items: flex-start;
+        /* Align top partially */
+    }
+
+    .hero-content {
+        padding-top: 4rem;
+    }
+
+    .hero h1 {
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+        margin-bottom: 2.5rem;
+    }
+
+    /* Adjust background blobs opacity for text readability */
+    .hero::before,
+    .hero::after {
+        opacity: 0.6;
+        width: 300px;
+        height: 300px;
+        filter: blur(60px);
+    }
+}
+
+/* 4. Product Grid & Cards */
+@media (max-width: 768px) {
+    .product-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        /* Single column stack */
+        gap: 2.5rem;
+    }
+
+    .product-card {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        overflow: hidden;
+        /* Flex column to ensure consistent height if needed, but auto is fine */
+    }
+
+    .product-image {
+        height: 280px;
+        /* Generous height for tasty visuals */
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .product-info {
+        padding: 1.5rem;
+        text-align: left;
+        /* Easier reading on mobile */
+    }
+
+    .product-title {
+        font-size: 1.6rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-price {
+        font-size: 1.4rem;
+        color: var(--color-gold);
+        margin-bottom: 0;
+    }
+
+    .product-rating {
+        margin-bottom: 1rem;
+    }
+
+    .btn-add {
+        width: 100%;
+        padding: 1.1rem;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-add:active {
+        background: var(--color-gold);
+        color: black;
+    }
+}
+
+/* 5. Cart Sidebar Mobile */
+@media (max-width: 768px) {
+    .cart-sidebar {
+        width: 100%;
+        /* Full width */
+        max-width: 100%;
+    }
+
+    .cart-header {
+        padding: 1.5rem;
+    }
+
+    .cart-items {
+        padding: 1.5rem;
+    }
+}
+
+/* 6. Utility Features (Available on all breakpoints but critical for mobile) */
+
+/* Ingredients Link */
+.ingredients-link {
+    display: inline-block;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    color: var(--color-text-muted);
+    margin-bottom: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.ingredients-link:hover {
+    color: var(--color-gold);
+}
+
+/* Product Rating Row */
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--color-gold);
+    font-size: 0.9rem;
+}
+
+.product-rating span {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    margin-left: 2px;
+}
+
+/* Shipping Progress Bar */
+.shipping-progress-container {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.shipping-text {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-gold), #FFF0A0);
+    width: 0%;
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Filter Scroll Container for Mobile */
+@media (max-width: 768px) {
+    .filters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 1rem;
+        /* Space for scrollbar hide or touch area */
+        -webkit-overflow-scrolling: touch;
+        gap: 1rem;
+        /* Hide scrollbar */
+        scrollbar-width: none;
+    }
+
+    .filters::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-btn {
+        flex: 0 0 auto;
+        /* Don't shrink */
+        padding: 0.7rem 1.5rem;
+        font-size: 0.85rem;
+    }
+
+    /* 7. Sticky Checkout Bar (Mobile Only) */
+    .sticky-checkout-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(30, 20, 20, 0.95);
+        backdrop-filter: blur(12px);
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 999;
+        transform: translateY(100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .sticky-checkout-bar.visible {
+        transform: translateY(0);
+    }
+
+    .sticky-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--color-text-main);
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .sticky-items {
+        font-size: 0.9rem;
+        color: var(--color-text-muted);
+    }
+
+    .sticky-btn {
+        background: var(--color-gold);
+        color: #000;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(244, 196, 48, 0.3);
+    }
+
+    /* 8. Smart Toast Positioning */
+    #toast-container {
+        /* Override default bottom position for mobile safety */
+        bottom: auto;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 400px;
+        align-items: center;
+    }
+
+    .toast {
+        margin-bottom: 0.5rem;
+        /* Actually margin-top now since it's at top */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(30, 30, 30, 0.95);
+    }
+
+    /* 9. Juicier Interactions */
+    .product-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s;
+    }
+
+    .btn:active,
+    .sticky-btn:active {
+        transform: scale(0.95);
+    }
+}
+
+/* 10. Desktop-Specific Refinements (Mini-Cart Tray) */
+@media (min-width: 769px) {
+    .sticky-checkout-bar {
+        left: auto;
+        right: 40px;
+        bottom: 40px;
+        width: auto;
+        min-width: 320px;
+        background: rgba(30, 20, 20, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 24px;
+        padding: 1.2rem 2rem;
+        transform: translateX(150%);
+        /* Slide from right */
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .sticky-checkout-bar.visible {
+        transform: translateX(0);
+    }
+
+    .sticky-info {
+        gap: 0.8rem;
+    }
+
+    .sticky-items {
+        font-size: 1rem;
+    }
+
+    .sticky-total {
+        font-size: 1.4rem;
+    }
+
+    .sticky-btn {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .sticky-btn:hover {
+        transform: translateY(-5px) scale(1.05);
+        background: #fff;
+        color: #000;
+        box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+    }
+}
