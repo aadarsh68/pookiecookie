@@ -72,14 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAuthListeners(); // Initialize Auth Listeners
     setupIngredientsModal(); // Ingredients Modal
 
-    // Checkout listener
+    // Checkout listener (redirect to delivery page)
     const checkoutBtn = document.getElementById('checkout-btn');
     if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', funtion(){
-                                      window.location.href = "delivery.html";
-        
-    }
-});
+        checkoutBtn.addEventListener('click', function () {
+            window.location.href = "delivery.html";
+    });
+}
+
 
 function initScrollReveal() {
     const observer = new IntersectionObserver((entries) => {
@@ -668,61 +668,60 @@ window.handleSignup = handleSignup;
 window.handleLogout = handleLogout;
 
 // Checkout Logic
-function checkout() {
-    if (cart.length === 0) {
-        showToast("Your cart is empty Pookie! Add some cookies first. 🍪");
-        return;
-    }
+// function checkout() {
+//     if (cart.length === 0) {
+//         showToast("Your cart is empty Pookie! Add some cookies first. 🍪");
+//         return;
+//     }
+//
+//     const overlay = document.getElementById('address-overlay');
+//     if (overlay) {
+//         overlay.classList.add('open');
+//         vibrate(10);
+//         if (window.lucide) lucide.createIcons();
+//     }
+// }
 
-    // Open Address Modal instead of redirecting immediately
-    const overlay = document.getElementById('address-overlay');
-    if (overlay) {
-        overlay.classList.add('open');
-        vibrate(10);
-        if (window.lucide) lucide.createIcons();
-    }
-}
+// function finalizeCheckout(address) {
+//     let message = "Hi Pookie Cookie! 🍪\nI'd like to place an order:\n\n";
+//     let total = 0;
 
-function finalizeCheckout(address) {
-    let message = "Hi Pookie Cookie! 🍪\nI'd like to place an order:\n\n";
-    let total = 0;
+//     cart.forEach(item => {
+//         message += `- ${item.name} x${item.quantity} (₹${item.price * item.quantity})\n`;
+//         total += item.price * item.quantity;
+//     });
 
-    cart.forEach(item => {
-        message += `- ${item.name} x${item.quantity} (₹${item.price * item.quantity})\n`;
-        total += item.price * item.quantity;
-    });
+//     const shippingThreshold = 399;
+//     let shippingStatus = "Shipping Charges Apply";
+//     if (total >= shippingThreshold) {
+//         shippingStatus = "Free Shipping Applied 🎉";
+//     }
 
-    const shippingThreshold = 399;
-    let shippingStatus = "Shipping Charges Apply";
-    if (total >= shippingThreshold) {
-        shippingStatus = "Free Shipping Applied 🎉";
-    }
+//     message += `\n*Total Order Value: ₹${total}*`;
+//     message += `\n(${shippingStatus})`;
+//     message += `\n\n📍 *Delivery Address:* \n${address}`;
+//     message += "\n\nPlease confirm my order!";
 
-    message += `\n*Total Order Value: ₹${total}*`;
-    message += `\n(${shippingStatus})`;
-    message += `\n\n📍 *Delivery Address:* \n${address}`;
-    message += "\n\nPlease confirm my order!";
+//     // Encode for URL
+//     const encodedMessage = encodeURIComponent(message);
 
-    // Encode for URL
-    const encodedMessage = encodeURIComponent(message);
+//     // Phone Numbers
+//     const phone1 = "918260636417";
+//     const phone2 = "919871162218";
 
-    // Phone Numbers
-    const phone1 = "918260636417";
-    const phone2 = "919871162218";
+//     // Close Address Modal
+//     document.getElementById('address-overlay').classList.remove('open');
 
-    // Close Address Modal
-    document.getElementById('address-overlay').classList.remove('open');
+//     // Open WhatsApp for First Number
+//     window.open(`https://wa.me/${phone1}?text=${encodedMessage}`, '_blank');
 
-    // Open WhatsApp for First Number
-    window.open(`https://wa.me/${phone1}?text=${encodedMessage}`, '_blank');
-
-    // Prompt for Second Number
-    setTimeout(() => {
-        if (confirm("Would you like to send the order confirmation to the second number as well?")) {
-            window.open(`https://wa.me/${phone2}?text=${encodedMessage}`, '_blank');
-        }
-    }, 1000);
-}
+//     // Prompt for Second Number
+//     setTimeout(() => {
+//         if (confirm("Would you like to send the order confirmation to the second number as well?")) {
+//             window.open(`https://wa.me/${phone2}?text=${encodedMessage}`, '_blank');
+//         }
+//     }, 1000);
+// }
 
 // Haptic Feedback Utility
 function vibrate(ms) {
@@ -730,5 +729,6 @@ function vibrate(ms) {
         navigator.vibrate(ms);
     }
 }
+
 
 
