@@ -1,37 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Delivery Details | Pookie Cookie</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body style="background:#0f0f0f; color:white; font-family:Outfit; padding:40px;">
 
-<h2>Delivery Details</h2>
+  <h2>Delivery Details</h2>
 
-<form id="deliveryForm">
-  <input type="text" id="name" placeholder="Full Name" required><br>
-  <input type="text" id="phone" placeholder="Phone Number" required><br>
-  <textarea id="address" placeholder="Full Address" required></textarea><br>
-  <input type="text" id="pincode" placeholder="Pincode" required><br>
+  <form id="deliveryForm">
+    <input type="text" placeholder="Full Name" required><br><br>
+    <input type="text" placeholder="Phone Number" required><br><br>
+    <textarea placeholder="Full Address" required></textarea><br><br>
+    <input type="text" placeholder="Pincode" required><br><br>
 
-  <button type="submit">Proceed to Payment</button>
-</form>
+    <button type="submit">Proceed to Payment</button>
+  </form>
 
-<script>
-document.getElementById("deliveryForm").onsubmit = function(e){
-  e.preventDefault();
-
-  const data = {
-    name: name.value,
-    phone: phone.value,
-    address: address.value,
-    pincode: pincode.value
-  };
-
-  localStorage.setItem("deliveryDetails", JSON.stringify(data));
-  window.location.href = "payment.html";
-};
-</script>
+  <script>
+    document.getElementById("deliveryForm").onsubmit = function(e){
+      e.preventDefault();
+      alert("Address saved. Next: Payment Page.");
+      // Next step will be redirect to payment.html
+    }
+  </script>
 
 </body>
 </html>
