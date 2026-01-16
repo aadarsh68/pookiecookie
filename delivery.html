@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Delivery Details | Pookie Cookie</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h2>Delivery Details</h2>
+
+<form id="deliveryForm">
+  <input type="text" id="name" placeholder="Full Name" required><br>
+  <input type="text" id="phone" placeholder="Phone Number" required><br>
+  <textarea id="address" placeholder="Full Address" required></textarea><br>
+  <input type="text" id="pincode" placeholder="Pincode" required><br>
+
+  <button type="submit">Proceed to Payment</button>
+</form>
+
+<script>
+document.getElementById("deliveryForm").onsubmit = function(e){
+  e.preventDefault();
+
+  const data = {
+    name: name.value,
+    phone: phone.value,
+    address: address.value,
+    pincode: pincode.value
+  };
+
+  localStorage.setItem("deliveryDetails", JSON.stringify(data));
+  window.location.href = "payment.html";
+};
+</script>
+
+</body>
+</html>
