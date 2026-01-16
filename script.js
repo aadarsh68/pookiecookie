@@ -75,7 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Checkout listener
     const checkoutBtn = document.getElementById('checkout-btn');
     if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', checkout);
+        checkoutBtn.addEventListener('click', funtion(){
+                                      window.location.href = "delivery.html";
+        
     }
 });
 
@@ -728,4 +730,5 @@ function vibrate(ms) {
         navigator.vibrate(ms);
     }
 }
+
 
