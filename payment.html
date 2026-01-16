@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Secure Payment | Pookie Cookie</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+<h2>Confirm & Pay</h2>
+<div id="addressBox"></div>
+<button id="payBtn">Pay Now</button>
+
+<script>
+const data = JSON.parse(localStorage.getItem("deliveryDetails"));
+document.getElementById("addressBox").innerHTML = `
+  <p>${data.name}</p>
+  <p>${data.phone}</p>
+  <p>${data.address}</p>
+  <p>${data.pincode}</p>
+`;
+
+document.getElementById("payBtn").onclick = function(){
+  var options = {
+    key: "YOUR_RAZORPAY_KEY",
+    amount: 50000,
+    currency: "INR",
+    name: "Pookie Cookie",
+    handler: function (response) {
+      alert("Payment Successful!");
+    }
+  };
+  new Razorpay(options).open();
+};
+</script>
+
+</body>
+</html>
